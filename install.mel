@@ -1,0 +1,34 @@
+global string $gShelfTopLevel;
+string $currentShelf = `tabLayout -query -selectTab $gShelfTopLevel`;
+setParent $currentShelf;
+
+string $path = `asInstallScriptLocation`;
+string $script_name = "Deformer Weight Manager";
+string $file_name = "deformer_weight_manager";
+string $source_file = $path + $file_name + "/startup.py";
+string $command = "import sys\npath = '" + $path + "'\nif not path in sys.path:\n    sys.path.append(path)\nfrom deformer_weight_manager import startup\nreload(startup)\nstartup.main()";
+string $icon = $path + "deformer_weight_manager/ui/resource/icon/deform.png";
+
+if (!`file -q -ex $source_file`)
+	error ("Something went wrong, can not find: \""+$source_file+"\"");
+shelfButton
+	-command $command
+	-annotation $script_name
+	-label $script_name
+	-image1 $icon
+	-sourceType "python"
+;
+
+global proc asInstallScriptLocator (){}
+
+global proc string asInstallScriptLocation (){
+	string $whatIs=`whatIs asInstallScriptLocator`;
+	string $fullPath=`substring $whatIs 25 999`;
+	string $buffer[];
+	int $numTok=`tokenize $fullPath "/" $buffer`;
+	int $numLetters=size($fullPath);
+	int $numLettersLastFolder=size($buffer[$numTok-1]);
+	string $scriptLocation=`substring $fullPath 1 ($numLetters-$numLettersLastFolder)`;
+	return $scriptLocation;
+}
+
