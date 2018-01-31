@@ -18,3 +18,6 @@
 #### 安装
 
 * 将“install.mel”拖放到maya场景中，将在工具架上生成一个新的按钮，点击它启动工具
+
+#### Trello
+https://trello.com/b/LItmteef/deform-weight-manager
